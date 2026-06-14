@@ -1,0 +1,17 @@
+{
+  "name": "carbonwise-dashboard",
+  "private": true,
+  "version": "0.0.0",
+  "scripts": {
+    "dev": "npm --prefix app run dev",
+    "build": "npm --prefix app run build",
+    "start": "npm --prefix app run start",
+    "lint": "npm --prefix app run lint",
+    "check": "npm --prefix app run check",
+    "test": "npm --prefix app run test",
+    "format": "npm --prefix app run format",
+    "db:generate": "npm --prefix app run db:generate",
+    "db:migrate": "npm --prefix app run db:migrate",
+    "db:push": "npm --prefix app run db:push"
+  }
+}
