@@ -2,9 +2,5 @@
   "version": 2,
   "buildCommand": "npm install && npm run build",
   "installCommand": "npm install",
-  "outputDirectory": "app/dist/public",
-  "framework": null,
-  "settings": {
-    "rootDirectory": "app"
-  }
+  "outputDirectory": "app/dist/public"
 }
