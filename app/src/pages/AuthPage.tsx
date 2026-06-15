@@ -137,7 +137,7 @@ export default function AuthPage() {
       </div>
 
       {/* Right Panel */}
-      <div className="flex-1 flex items-center justify-center bg-white px-4 py-12">
+      <div className="flex-1 flex items-center justify-center bg-white px-4 py-12 light text-foreground">
         <div className="w-full max-w-md">
           {/* Mobile logo */}
           <div className="lg:hidden flex items-center gap-2 mb-8 justify-center">
@@ -199,7 +199,7 @@ export default function AuthPage() {
                         value={fullName}
                         onChange={(e) => setFullName(e.target.value)}
                         placeholder="John Doe"
-                        className="mt-1.5"
+                        className="mt-1.5 text-slate-900 bg-white border-slate-300"
                         required
                       />
                     </div>
@@ -213,7 +213,7 @@ export default function AuthPage() {
                         value={city}
                         onChange={(e) => setCity(e.target.value)}
                         placeholder="San Francisco"
-                        className="mt-1.5"
+                        className="mt-1.5 text-slate-900 bg-white border-slate-300"
                       />
                     </div>
                   </>
@@ -229,7 +229,7 @@ export default function AuthPage() {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="you@example.com"
-                    className="mt-1.5"
+                    className="mt-1.5 text-slate-900 bg-white border-slate-300"
                     required
                   />
                 </div>
@@ -245,7 +245,7 @@ export default function AuthPage() {
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                       placeholder={mode === 'signup' ? 'Min 6 characters' : 'Your password'}
-                      className="pr-10"
+                      className="pr-10 text-slate-900 bg-white border-slate-300"
                       required
                     />
                     <button

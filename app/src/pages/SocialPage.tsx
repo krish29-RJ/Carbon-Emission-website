@@ -379,7 +379,7 @@ export default function SocialPage() {
                       </div>
                     </div>
                     <button
-                      onClick={() => setJoined(prev => { const s = new Set(prev); s.has(c.name) ? s.delete(c.name) : s.add(c.name); return s; })}
+                      onClick={() => setJoined(prev => { const s = new Set(prev); if (s.has(c.name)) { s.delete(c.name); } else { s.add(c.name); } return s; })}
                       className={`text-[10px] font-semibold px-3 py-1 rounded-lg transition-all ${
                         joined.has(c.name)
                           ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30'

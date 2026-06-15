@@ -606,7 +606,7 @@ const EcoWorld = memo(function EcoWorld({
       cancelAnimationFrame(animationId);
       window.removeEventListener('resize', resizeCanvas);
     };
-  }, [total, transport, energy, food, lifestyle, renewable]);
+  }, [total, transport, energy, food, lifestyle, renewable, interactive, isHigh, isLow, tooltip]);
 
   return (
     <div ref={containerRef} className="relative w-full overflow-hidden rounded-2xl glass-card border border-white/10 select-none">

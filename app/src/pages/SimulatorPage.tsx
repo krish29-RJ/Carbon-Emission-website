@@ -161,7 +161,7 @@ function ToggleRow({
         <button
           onClick={() => onChange(!value)}
           className="relative w-11 h-6 rounded-full transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-1"
-          style={{ background: value ? color : '#CBD5E1', focusRingColor: color }}
+          style={{ background: value ? color : '#CBD5E1', '--tw-ring-color': color } as React.CSSProperties}
           aria-checked={value}
           role="switch"
         >
@@ -205,23 +205,30 @@ export default function SimulatorPage() {
 
   useEffect(() => {
     if (!isSupabaseConfigured || !user) { setLoading(false); return; }
-    supabase
-      .from('footprint_reports')
-      .select('input_data, total_co2')
-      .eq('user_id', user.id)
-      .order('created_at', { ascending: false })
-      .limit(1)
-      .single()
-      .then(({ data }) => {
+    const userId = user.id;
+    async function loadData() {
+      try {
+        const { data } = await supabase
+          .from('footprint_reports')
+          .select('input_data, total_co2e')
+          .eq('user_id', userId)
+          .order('created_at', { ascending: false })
+          .limit(1)
+          .single();
+
         if (data?.input_data) {
           const raw = data.input_data as Record<string, unknown>;
           const safe = sanitiseInput(raw);
           setBaseInput(safe);
           setIsDemo(false);
         }
+      } catch (err) {
+        console.error('Failed to load footprint input data:', err);
+      } finally {
         setLoading(false);
-      })
-      .catch(() => setLoading(false));
+      }
+    }
+    loadData();
   }, [user]);
 
   const set = useCallback(<K extends keyof Adjustments>(key: K, value: Adjustments[K]) => {

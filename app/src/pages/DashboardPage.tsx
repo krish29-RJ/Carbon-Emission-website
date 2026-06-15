@@ -1,11 +1,11 @@
-import { useEffect, useState, useCallback, useMemo, memo } from 'react';
+import { useEffect, useState, useCallback, useMemo } from 'react';
 import { useNavigate } from 'react-router';
 import { motion, AnimatePresence } from 'framer-motion';
 import { format, parseISO } from 'date-fns';
 import {
   Leaf, Car, Zap, Apple, ShoppingBag,
   Target, Award, Calculator, ChevronRight, Flame, Trophy,
-  Globe, Landmark, TrendingDown, TrendingUp, Users,
+  Globe, Landmark, Users,
   Sliders, RotateCcw, Utensils, Info
 } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip as RechartTooltip, ResponsiveContainer, Legend, Cell } from 'recharts';
@@ -1006,7 +1006,9 @@ export default function DashboardPage() {
                         <XAxis dataKey="cat" tick={{fontSize:11,fill:'#64748b'}} axisLine={false} tickLine={false} />
                         <YAxis tick={{fontSize:10,fill:'#64748b'}} axisLine={false} tickLine={false} />
                         <RechartTooltip
+                          cursor={{ fill: 'rgba(255, 255, 255, 0.04)' }}
                           contentStyle={{background:'#0f172a',border:'1px solid #1e293b',borderRadius:'10px',fontSize:12,color:'#e2e8f0'}}
+                          itemStyle={{color: '#e2e8f0'}}
                           formatter={(v: number) => [`${v.toFixed(1)} kg`]}
                         />
                         <Legend wrapperStyle={{fontSize:11,color:'#64748b',paddingTop:8}} />

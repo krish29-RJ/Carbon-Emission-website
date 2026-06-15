@@ -95,7 +95,7 @@ export default function GoalCard({ goal, onUpdate }: Props) {
           onUpdate?.();
         }, 300);
       }
-    } catch (e) {
+    } catch {
       setRemoved(false);
     }
   };

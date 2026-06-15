@@ -173,7 +173,7 @@ export default function CalculatorPage() {
   const impactLabel = result ? getImpactLabel(result.impactLevel) : '';
 
   return (
-    <div className="min-h-screen bg-slate-50 pt-20 pb-12 px-4">
+    <div className="min-h-screen bg-slate-50 pt-20 pb-12 px-4 light text-foreground">
       <div className="max-w-2xl mx-auto">
         {/* Progress bar */}
         {step < 6 && (

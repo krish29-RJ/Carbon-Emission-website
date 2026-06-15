@@ -185,7 +185,7 @@ export default function ProfilePage() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 pt-20 pb-16 px-4">
+    <div className="min-h-screen bg-slate-50 pt-20 pb-16 px-4 light text-foreground">
       <div className="max-w-5xl mx-auto space-y-6">
 
         {/* Hero Profile Card */}

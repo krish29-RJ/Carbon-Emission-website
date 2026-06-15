@@ -158,7 +158,7 @@ export default function LogPage() {
   const [nudgeDismissed, setNudgeDismissed] = useState(false);
   const [logged, setLogged] = useState(false);
 
-  const setValue = useCallback((key: string, val: number, _category?: string) => {
+  const setValue = useCallback((key: string, val: number) => {
     setValues(prev => ({ ...prev, [key]: val }));
     setNudgeDismissed(false);
 
@@ -214,7 +214,7 @@ export default function LogPage() {
         } else if (report) {
           // Flatten selected values into user_activities list
           const activitiesList = Object.entries(values)
-            .filter(([_, val]) => val > 0)
+            .filter((entry) => entry[1] > 0)
             .map(([key, val]) => {
               // Find matching category & option
               let category = 'lifestyle';
@@ -373,7 +373,7 @@ export default function LogPage() {
                         {[0, Math.round(opt.max * 0.25), Math.round(opt.max * 0.5), Math.round(opt.max * 0.75)].map(preset => (
                           <button
                             key={preset}
-                            onClick={() => setValue(opt.key, preset, activeTab)}
+                            onClick={() => setValue(opt.key, preset)}
                             className={`text-[9px] px-1.5 py-0.5 rounded font-medium transition-all ${
                               val === preset ? 'text-white' : 'text-slate-500 hover:text-slate-300'
                             }`}
@@ -399,7 +399,7 @@ export default function LogPage() {
                         max={opt.max}
                         step={opt.step}
                         value={val}
-                        onChange={e => setValue(opt.key, Number(e.target.value), activeTab)}
+                        onChange={e => setValue(opt.key, Number(e.target.value))}
                         className="absolute inset-0 w-full opacity-0 cursor-pointer h-2"
                         style={{ height: '8px', top: 0 }}
                         aria-label={`${opt.label} amount`}
@@ -465,7 +465,7 @@ export default function LogPage() {
                         <motion.div
                           className="h-full rounded-full"
                           style={{ background: tab.color }}
-                          animate={{ width: `${(catKg / maxCat) * 100}%` }}
+                          animate={{ width: `${Math.max(0, (catKg / maxCat) * 100)}%` }}
                           transition={{ duration: 0.3 }}
                         />
                       </div>
