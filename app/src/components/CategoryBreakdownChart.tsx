@@ -38,6 +38,11 @@ function CustomTooltip({
   );
 }
 
+/**
+ * CategoryBreakdownChart component.
+ * 
+ * @returns {JSX.Element} The rendered component.
+ */
 export default function CategoryBreakdownChart({ data, total }: Props) {
   return (
     <div className="glass-card rounded-2xl p-6 shadow-sm">

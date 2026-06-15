@@ -104,7 +104,24 @@ function getCoachResponse(userMessage: string): string {
   ];
 }
 
-// ─── Markdown-like renderer (basic) ──────────────────────────────────────────
+const BoldText = ({ text, strongClass = "" }: { text: string; strongClass?: string }) => {
+  const parts = text.split(/\*\*(.*?)\*\*/g);
+  return (
+    <>
+      {parts.map((part, i) =>
+        i % 2 === 1 ? (
+          <strong key={i} className={strongClass}>
+            {part}
+          </strong>
+        ) : (
+          <span key={i}>{part}</span>
+        )
+      )}
+    </>
+  );
+};
+
+// ─── Markdown-like renderer (secure) ──────────────────────────────────────────
 function RenderMarkdown({ content }: { content: string }) {
   const lines = content.split("\n");
   return (
@@ -146,14 +163,9 @@ function RenderMarkdown({ content }: { content: string }) {
               <span className="text-emerald-400 font-bold flex-shrink-0">
                 {num[1]}.
               </span>
-              <span
-                dangerouslySetInnerHTML={{
-                  __html: num[2].replace(
-                    /\*\*(.*?)\*\*/g,
-                    "<strong>$1</strong>"
-                  ),
-                }}
-              />
+              <span>
+                <BoldText text={num[2]} strongClass="" />
+              </span>
             </div>
           );
         }
@@ -161,17 +173,9 @@ function RenderMarkdown({ content }: { content: string }) {
           return (
             <div key={i} className="flex gap-2">
               <span className="text-emerald-400 mt-1 flex-shrink-0">•</span>
-              <span
-                className="text-slate-300"
-                dangerouslySetInnerHTML={{
-                  __html: line
-                    .slice(2)
-                    .replace(
-                      /\*\*(.*?)\*\*/g,
-                      '<strong class="text-white">$1</strong>'
-                    ),
-                }}
-              />
+              <span className="text-slate-300">
+                <BoldText text={line.slice(2)} strongClass="text-white" />
+              </span>
             </div>
           );
         }
@@ -184,16 +188,9 @@ function RenderMarkdown({ content }: { content: string }) {
         }
         if (line === "") return <div key={i} className="h-1" />;
         return (
-          <p
-            key={i}
-            className="text-slate-300"
-            dangerouslySetInnerHTML={{
-              __html: line.replace(
-                /\*\*(.*?)\*\*/g,
-                '<strong class="text-white">$1</strong>'
-              ),
-            }}
-          />
+          <p key={i} className="text-slate-300">
+            <BoldText text={line} strongClass="text-white" />
+          </p>
         );
       })}
     </div>
@@ -201,6 +198,11 @@ function RenderMarkdown({ content }: { content: string }) {
 }
 
 // ─── Main Component ───────────────────────────────────────────────────────────
+/**
+ * CoachPage component.
+ * 
+ * @returns {JSX.Element} The rendered component.
+ */
 export default function CoachPage() {
   const [messages, setMessages] = useState<Message[]>([
     {

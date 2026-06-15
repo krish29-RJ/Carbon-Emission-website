@@ -5,6 +5,11 @@ interface Props {
   children: React.ReactNode;
 }
 
+/**
+ * ProtectedRoute component.
+ * 
+ * @returns {JSX.Element} The rendered component.
+ */
 export default function ProtectedRoute({ children }: Props) {
   const { isLoading } = useAuth();
 

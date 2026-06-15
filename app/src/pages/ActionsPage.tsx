@@ -23,6 +23,11 @@ interface GoalItem {
   completed_at: string | null;
 }
 
+/**
+ * ActionsPage component.
+ * 
+ * @returns {JSX.Element} The rendered component.
+ */
 export default function ActionsPage() {
   const { user } = useAuth();
   const [tab, setTab] = useState<Tab>("recommended");

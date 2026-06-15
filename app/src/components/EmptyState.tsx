@@ -10,6 +10,11 @@ interface Props {
   };
 }
 
+/**
+ * EmptyState component.
+ * 
+ * @returns {JSX.Element} The rendered component.
+ */
 export function EmptyState({ icon, title, description, action }: Props) {
   return (
     <div className="flex flex-col items-center justify-center py-12 px-4 text-center">

@@ -12,6 +12,11 @@ interface Props {
   subtext?: string;
 }
 
+/**
+ * StatCard component.
+ * 
+ * @returns {JSX.Element} The rendered component.
+ */
 export default function StatCard({
   icon,
   iconBg,

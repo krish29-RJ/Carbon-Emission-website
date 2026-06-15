@@ -1,5 +1,10 @@
 import { Skeleton } from "./ui/skeleton";
 
+/**
+ * AuthLayoutSkeleton component.
+ * 
+ * @returns {JSX.Element} The rendered component.
+ */
 export function AuthLayoutSkeleton() {
   return (
     <div className="flex min-h-screen bg-background">

@@ -14,6 +14,11 @@ type Mode = "signin" | "signup";
 const SUPABASE_SETUP_MESSAGE =
   "Supabase is not configured for this local app. Add VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY to app/.env, then restart the dev server.";
 
+/**
+ * AuthPage component.
+ * 
+ * @returns {JSX.Element} The rendered component.
+ */
 export default function AuthPage() {
   const navigate = useNavigate();
   const location = useLocation();

@@ -71,6 +71,11 @@ interface Props {
   onAccept?: () => void;
 }
 
+/**
+ * RecommendationCard component.
+ * 
+ * @returns {JSX.Element} The rendered component.
+ */
 export default function RecommendationCard({
   recommendation,
   onAccept,

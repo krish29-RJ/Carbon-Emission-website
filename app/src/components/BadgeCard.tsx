@@ -47,6 +47,11 @@ interface Props {
   badge: Badge;
 }
 
+/**
+ * BadgeCard component.
+ * 
+ * @returns {JSX.Element} The rendered component.
+ */
 export default function BadgeCard({ badge }: Props) {
   const [showTooltip, setShowTooltip] = useState(false);
   const Icon = iconMap[badge.icon] || FileCheck;

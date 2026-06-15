@@ -66,6 +66,11 @@ const features = [
   },
 ];
 
+/**
+ * Home component.
+ * 
+ * @returns {JSX.Element} The rendered component.
+ */
 export default function Home() {
   const { isAuthenticated } = useAuth();
   const navigate = useNavigate();

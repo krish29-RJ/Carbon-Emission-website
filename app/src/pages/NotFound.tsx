@@ -2,6 +2,11 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Link } from "react-router";
 
+/**
+ * NotFound component.
+ * 
+ * @returns {JSX.Element} The rendered component.
+ */
 export default function NotFound() {
   return (
     <div className="min-h-screen flex items-center justify-center">

@@ -364,6 +364,11 @@ const TABS = [
 ];
 
 // ─── Main Page ─────────────────────────────────────────────────────────────────
+/**
+ * LogPage component.
+ * 
+ * @returns {JSX.Element} The rendered component.
+ */
 export default function LogPage() {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("transport");

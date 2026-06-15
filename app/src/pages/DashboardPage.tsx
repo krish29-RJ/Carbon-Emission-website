@@ -155,6 +155,11 @@ interface BadgeItem {
   earned: boolean;
 }
 
+/**
+ * DashboardPage component.
+ * 
+ * @returns {JSX.Element} The rendered component.
+ */
 export default function DashboardPage() {
   const navigate = useNavigate();
   const { user, profile } = useAuth();

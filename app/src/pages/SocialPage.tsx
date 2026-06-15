@@ -467,6 +467,11 @@ function ShareCard({
 }
 
 // ─── Main Page ─────────────────────────────────────────────────────────────────
+/**
+ * SocialPage component.
+ * 
+ * @returns {JSX.Element} The rendered component.
+ */
 export default function SocialPage() {
   const [selectedCircle, setSelectedCircle] = useState<Circle>(DEMO_CIRCLES[0]);
   const [showCreate, setShowCreate] = useState(false);

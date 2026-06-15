@@ -43,6 +43,11 @@ const DEFAULT_WIDTH = 280;
 const MIN_WIDTH = 200;
 const MAX_WIDTH = 480;
 
+/**
+ * AuthLayout component.
+ * 
+ * @returns {JSX.Element} The rendered component.
+ */
 export default function AuthLayout({ children }: { children: ReactNode }) {
   const [sidebarWidth, setSidebarWidth] = useState(() => {
     const saved = localStorage.getItem(SIDEBAR_WIDTH_KEY);

@@ -48,6 +48,11 @@ interface Props {
   onUpdate?: () => void;
 }
 
+/**
+ * GoalCard component.
+ * 
+ * @returns {JSX.Element} The rendered component.
+ */
 export default function GoalCard({ goal, onUpdate }: Props) {
   const [completing, setCompleting] = useState(false);
   const [removed, setRemoved] = useState(false);

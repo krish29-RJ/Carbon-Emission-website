@@ -100,6 +100,11 @@ const bannerPresets = [
   },
 ];
 
+/**
+ * ProfilePage component.
+ * 
+ * @returns {JSX.Element} The rendered component.
+ */
 export default function ProfilePage() {
   const navigate = useNavigate();
   const { user, profile, refreshProfile } = useAuth();

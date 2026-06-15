@@ -49,6 +49,11 @@ function CustomTooltip({
   );
 }
 
+/**
+ * FootprintTrendChart component.
+ * 
+ * @returns {JSX.Element} The rendered component.
+ */
 export default function FootprintTrendChart({ data }: Props) {
   if (!data || data.length === 0) {
     return (

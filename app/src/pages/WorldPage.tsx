@@ -51,6 +51,11 @@ const TIPS = [
   },
 ];
 
+/**
+ * WorldPage component.
+ * 
+ * @returns {JSX.Element} The rendered component.
+ */
 export default function WorldPage() {
   const [preset, setPreset] = useState(PRESETS[1]);
   const [transport, setTransport] = useState(preset.transport);

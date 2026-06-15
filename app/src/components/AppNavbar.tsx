@@ -27,6 +27,11 @@ const navLinks = [
   { path: "/methodology", label: "Methodology", icon: BookOpen },
 ];
 
+/**
+ * AppNavbar component.
+ * 
+ * @returns {JSX.Element} The rendered component.
+ */
 export default function AppNavbar() {
   const { user, profile, isAuthenticated, signOut } = useAuth();
   const location = useLocation();

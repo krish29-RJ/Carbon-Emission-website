@@ -281,6 +281,11 @@ function Counter({
 }
 
 // ─── Main component ──────────────────────────────────────────────────────────
+/**
+ * SimulatorPage component.
+ * 
+ * @returns {JSX.Element} The rendered component.
+ */
 export default function SimulatorPage() {
   const navigate = useNavigate();
   const { user } = useAuth();

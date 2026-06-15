@@ -53,6 +53,11 @@ const dietOptions = [
   { value: "meat-heavy", label: "Meat-Heavy", icon: Apple },
 ];
 
+/**
+ * CalculatorPage component.
+ * 
+ * @returns {JSX.Element} The rendered component.
+ */
 export default function CalculatorPage() {
   const { user, profile } = useAuth();
   const [step, setStep] = useState(0);

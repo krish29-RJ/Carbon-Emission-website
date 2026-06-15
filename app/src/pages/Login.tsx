@@ -17,6 +17,11 @@ function getOAuthUrl() {
   return url.toString();
 }
 
+/**
+ * Login component.
+ * 
+ * @returns {JSX.Element} The rendered component.
+ */
 export default function Login() {
   return (
     <div className="min-h-screen flex items-center justify-center">
