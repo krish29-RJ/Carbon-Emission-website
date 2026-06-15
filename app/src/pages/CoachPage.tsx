@@ -1,11 +1,20 @@
-import { useState, useRef, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Brain, Send, Leaf, RotateCcw, Copy, CheckCheck, Sparkles, ChevronDown } from 'lucide-react';
+import { useState, useRef, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  Brain,
+  Send,
+  Leaf,
+  RotateCcw,
+  Copy,
+  CheckCheck,
+  Sparkles,
+  ChevronDown,
+} from "lucide-react";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 interface Message {
   id: string;
-  role: 'user' | 'assistant';
+  role: "user" | "assistant";
   content: string;
   timestamp: Date;
 }
@@ -36,79 +45,155 @@ const COACHING_RESPONSES: Record<string, string[]> = {
 
 // ─── Suggested Prompts ────────────────────────────────────────────────────────
 const SUGGESTED_PROMPTS = [
-  'How can I reduce my transport emissions?',
-  'Give me a plant-based diet plan',
-  'Explain my energy footprint',
-  'Create a 90-day carbon reduction plan',
-  'How do flights impact my score?',
-  'Tips for sustainable shopping',
+  "How can I reduce my transport emissions?",
+  "Give me a plant-based diet plan",
+  "Explain my energy footprint",
+  "Create a 90-day carbon reduction plan",
+  "How do flights impact my score?",
+  "Tips for sustainable shopping",
 ];
 
 // ─── Helper: match coaching response ─────────────────────────────────────────
 function getCoachResponse(userMessage: string): string {
   const msg = userMessage.toLowerCase();
-  if (msg.includes('flight') || msg.includes('plane') || msg.includes('travel') || msg.includes('transport') || msg.includes('car') || msg.includes('drive')) {
-    return COACHING_RESPONSES.transport[Math.floor(Math.random() * COACHING_RESPONSES.transport.length)];
+  if (
+    msg.includes("flight") ||
+    msg.includes("plane") ||
+    msg.includes("travel") ||
+    msg.includes("transport") ||
+    msg.includes("car") ||
+    msg.includes("drive")
+  ) {
+    return COACHING_RESPONSES.transport[
+      Math.floor(Math.random() * COACHING_RESPONSES.transport.length)
+    ];
   }
-  if (msg.includes('food') || msg.includes('diet') || msg.includes('meat') || msg.includes('vegan') || msg.includes('plant')) {
-    return COACHING_RESPONSES.food[Math.floor(Math.random() * COACHING_RESPONSES.food.length)];
+  if (
+    msg.includes("food") ||
+    msg.includes("diet") ||
+    msg.includes("meat") ||
+    msg.includes("vegan") ||
+    msg.includes("plant")
+  ) {
+    return COACHING_RESPONSES.food[
+      Math.floor(Math.random() * COACHING_RESPONSES.food.length)
+    ];
   }
-  if (msg.includes('energy') || msg.includes('electricity') || msg.includes('solar') || msg.includes('ac') || msg.includes('home')) {
-    return COACHING_RESPONSES.energy[Math.floor(Math.random() * COACHING_RESPONSES.energy.length)];
+  if (
+    msg.includes("energy") ||
+    msg.includes("electricity") ||
+    msg.includes("solar") ||
+    msg.includes("ac") ||
+    msg.includes("home")
+  ) {
+    return COACHING_RESPONSES.energy[
+      Math.floor(Math.random() * COACHING_RESPONSES.energy.length)
+    ];
   }
-  if (msg.includes('shop') || msg.includes('fashion') || msg.includes('buy') || msg.includes('purchase') || msg.includes('deliver')) {
+  if (
+    msg.includes("shop") ||
+    msg.includes("fashion") ||
+    msg.includes("buy") ||
+    msg.includes("purchase") ||
+    msg.includes("deliver")
+  ) {
     return COACHING_RESPONSES.shopping[0];
   }
-  return COACHING_RESPONSES.general[Math.floor(Math.random() * COACHING_RESPONSES.general.length)];
+  return COACHING_RESPONSES.general[
+    Math.floor(Math.random() * COACHING_RESPONSES.general.length)
+  ];
 }
 
 // ─── Markdown-like renderer (basic) ──────────────────────────────────────────
 function RenderMarkdown({ content }: { content: string }) {
-  const lines = content.split('\n');
+  const lines = content.split("\n");
   return (
     <div className="space-y-1.5 text-sm leading-relaxed">
       {lines.map((line, i) => {
-        if (line.startsWith('**') && line.endsWith('**') && !line.slice(2, -2).includes('**')) {
+        if (
+          line.startsWith("**") &&
+          line.endsWith("**") &&
+          !line.slice(2, -2).includes("**")
+        ) {
           const text = line.slice(2, -2);
-          return <p key={i} className="font-bold text-white text-base">{text}</p>;
+          return (
+            <p key={i} className="font-bold text-white text-base">
+              {text}
+            </p>
+          );
         }
-        if (line.startsWith('| ') && line.includes('|')) {
-          const cells = line.split('|').filter(c => c.trim());
+        if (line.startsWith("| ") && line.includes("|")) {
+          const cells = line.split("|").filter(c => c.trim());
           return (
             <div key={i} className="flex gap-4 text-xs">
               {cells.map((c, j) => (
-                <span key={j} className={`flex-1 ${j === 0 ? 'text-slate-300' : 'text-emerald-400 font-semibold'}`}>
+                <span
+                  key={j}
+                  className={`flex-1 ${j === 0 ? "text-slate-300" : "text-emerald-400 font-semibold"}`}
+                >
                   {c.trim()}
                 </span>
               ))}
             </div>
           );
         }
-        if (line.startsWith('|---')) return <div key={i} className="border-t border-white/5 my-1" />;
+        if (line.startsWith("|---"))
+          return <div key={i} className="border-t border-white/5 my-1" />;
         if (line.match(/^\d+\./)) {
           const num = line.match(/^(\d+)\. (.*)/)!;
           return (
             <div key={i} className="flex gap-2">
-              <span className="text-emerald-400 font-bold flex-shrink-0">{num[1]}.</span>
-              <span dangerouslySetInnerHTML={{ __html: num[2].replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') }} />
+              <span className="text-emerald-400 font-bold flex-shrink-0">
+                {num[1]}.
+              </span>
+              <span
+                dangerouslySetInnerHTML={{
+                  __html: num[2].replace(
+                    /\*\*(.*?)\*\*/g,
+                    "<strong>$1</strong>"
+                  ),
+                }}
+              />
             </div>
           );
         }
-        if (line.startsWith('- ')) {
+        if (line.startsWith("- ")) {
           return (
             <div key={i} className="flex gap-2">
               <span className="text-emerald-400 mt-1 flex-shrink-0">•</span>
-              <span className="text-slate-300" dangerouslySetInnerHTML={{ __html: line.slice(2).replace(/\*\*(.*?)\*\*/g, '<strong class="text-white">$1</strong>') }} />
+              <span
+                className="text-slate-300"
+                dangerouslySetInnerHTML={{
+                  __html: line
+                    .slice(2)
+                    .replace(
+                      /\*\*(.*?)\*\*/g,
+                      '<strong class="text-white">$1</strong>'
+                    ),
+                }}
+              />
             </div>
           );
         }
-        if (line.startsWith('*') && line.endsWith('*')) {
-          return <p key={i} className="text-slate-500 italic text-xs">{line.slice(1, -1)}</p>;
+        if (line.startsWith("*") && line.endsWith("*")) {
+          return (
+            <p key={i} className="text-slate-500 italic text-xs">
+              {line.slice(1, -1)}
+            </p>
+          );
         }
-        if (line === '') return <div key={i} className="h-1" />;
+        if (line === "") return <div key={i} className="h-1" />;
         return (
-          <p key={i} className="text-slate-300"
-            dangerouslySetInnerHTML={{ __html: line.replace(/\*\*(.*?)\*\*/g, '<strong class="text-white">$1</strong>') }} />
+          <p
+            key={i}
+            className="text-slate-300"
+            dangerouslySetInnerHTML={{
+              __html: line.replace(
+                /\*\*(.*?)\*\*/g,
+                '<strong class="text-white">$1</strong>'
+              ),
+            }}
+          />
         );
       })}
     </div>
@@ -119,20 +204,20 @@ function RenderMarkdown({ content }: { content: string }) {
 export default function CoachPage() {
   const [messages, setMessages] = useState<Message[]>([
     {
-      id: 'welcome',
-      role: 'assistant',
+      id: "welcome",
+      role: "assistant",
       content: `**👋 Welcome to your AI Carbon Coach!**\n\nI'm trained on climate science, EPA emissions data, DEFRA factors, and behavioral research to give you hyper-specific, actionable advice.\n\nAsk me anything — your daily commute, what to eat, how to green your home, or just ask for a 90-day action plan.\n\n*What would you like to tackle first?*`,
       timestamp: new Date(),
     },
   ]);
-  const [input, setInput] = useState('');
+  const [input, setInput] = useState("");
   const [isTyping, setIsTyping] = useState(false);
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, isTyping]);
 
   const sendMessage = async (text: string) => {
@@ -140,13 +225,13 @@ export default function CoachPage() {
 
     const userMsg: Message = {
       id: Date.now().toString(),
-      role: 'user',
+      role: "user",
       content: text.trim(),
       timestamp: new Date(),
     };
 
     setMessages(prev => [...prev, userMsg]);
-    setInput('');
+    setInput("");
     setIsTyping(true);
 
     // Simulate streaming delay
@@ -155,7 +240,7 @@ export default function CoachPage() {
 
     const assistantMsg: Message = {
       id: (Date.now() + 1).toString(),
-      role: 'assistant',
+      role: "assistant",
       content: response,
       timestamp: new Date(),
     };
@@ -170,7 +255,7 @@ export default function CoachPage() {
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
+    if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
       sendMessage(input);
     }
@@ -200,10 +285,14 @@ export default function CoachPage() {
               <Brain className="w-5 h-5 text-purple-400" />
             </div>
             <div>
-              <h1 className="text-xl font-bold tracking-tight">AI Carbon Coach</h1>
+              <h1 className="text-xl font-bold tracking-tight">
+                AI Carbon Coach
+              </h1>
               <div className="flex items-center gap-1.5">
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                <p className="text-xs text-slate-400">Powered by climate science &amp; EPA data</p>
+                <p className="text-xs text-slate-400">
+                  Powered by climate science &amp; EPA data
+                </p>
               </div>
             </div>
           </div>
@@ -244,47 +333,63 @@ export default function CoachPage() {
                 initial={{ opacity: 0, y: 15 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.3 }}
-                className={`flex gap-3 ${msg.role === 'user' ? 'flex-row-reverse' : ''}`}
+                className={`flex gap-3 ${msg.role === "user" ? "flex-row-reverse" : ""}`}
               >
                 {/* Avatar */}
-                <div className={`w-8 h-8 rounded-xl flex-shrink-0 flex items-center justify-center ${
-                  msg.role === 'assistant' ? 'bg-purple-500/20' : 'bg-emerald-500/20'
-                }`}>
-                  {msg.role === 'assistant'
-                    ? <Brain className="w-4 h-4 text-purple-400" />
-                    : <Leaf className="w-4 h-4 text-emerald-400" />
-                  }
+                <div
+                  className={`w-8 h-8 rounded-xl flex-shrink-0 flex items-center justify-center ${
+                    msg.role === "assistant"
+                      ? "bg-purple-500/20"
+                      : "bg-emerald-500/20"
+                  }`}
+                >
+                  {msg.role === "assistant" ? (
+                    <Brain className="w-4 h-4 text-purple-400" />
+                  ) : (
+                    <Leaf className="w-4 h-4 text-emerald-400" />
+                  )}
                 </div>
 
                 {/* Bubble */}
-                <div className={`group max-w-[85%] ${msg.role === 'user' ? 'items-end' : 'items-start'} flex flex-col gap-1`}>
-                  <div className={`rounded-2xl px-4 py-3 relative ${
-                    msg.role === 'user'
-                      ? 'bg-emerald-500/15 border border-emerald-500/20 text-white rounded-tr-none'
-                      : 'glass-card border border-white/8 rounded-tl-none'
-                  }`}>
-                    {msg.role === 'assistant'
-                      ? <RenderMarkdown content={msg.content} />
-                      : <p className="text-sm text-white">{msg.content}</p>
-                    }
+                <div
+                  className={`group max-w-[85%] ${msg.role === "user" ? "items-end" : "items-start"} flex flex-col gap-1`}
+                >
+                  <div
+                    className={`rounded-2xl px-4 py-3 relative ${
+                      msg.role === "user"
+                        ? "bg-emerald-500/15 border border-emerald-500/20 text-white rounded-tr-none"
+                        : "glass-card border border-white/8 rounded-tl-none"
+                    }`}
+                  >
+                    {msg.role === "assistant" ? (
+                      <RenderMarkdown content={msg.content} />
+                    ) : (
+                      <p className="text-sm text-white">{msg.content}</p>
+                    )}
                   </div>
 
                   {/* Actions */}
-                  <div className={`flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity ${
-                    msg.role === 'user' ? 'flex-row-reverse' : ''
-                  }`}>
+                  <div
+                    className={`flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity ${
+                      msg.role === "user" ? "flex-row-reverse" : ""
+                    }`}
+                  >
                     <span className="text-[10px] text-slate-600">
-                      {msg.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                      {msg.timestamp.toLocaleTimeString([], {
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      })}
                     </span>
-                    {msg.role === 'assistant' && (
+                    {msg.role === "assistant" && (
                       <button
                         onClick={() => copyMessage(msg.id, msg.content)}
                         className="text-slate-600 hover:text-slate-300 transition-colors"
                       >
-                        {copiedId === msg.id
-                          ? <CheckCheck className="w-3.5 h-3.5 text-emerald-400" />
-                          : <Copy className="w-3.5 h-3.5" />
-                        }
+                        {copiedId === msg.id ? (
+                          <CheckCheck className="w-3.5 h-3.5 text-emerald-400" />
+                        ) : (
+                          <Copy className="w-3.5 h-3.5" />
+                        )}
                       </button>
                     )}
                   </div>
@@ -314,7 +419,9 @@ export default function CoachPage() {
                         style={{ animationDelay: `${i * 0.15}s` }}
                       />
                     ))}
-                    <span className="text-xs text-slate-500 ml-1">Analyzing your footprint...</span>
+                    <span className="text-xs text-slate-500 ml-1">
+                      Analyzing your footprint...
+                    </span>
                   </div>
                 </div>
               </motion.div>
@@ -341,11 +448,11 @@ export default function CoachPage() {
               placeholder="Ask about transport, diet, energy, or request a custom plan..."
               rows={1}
               className="flex-1 bg-transparent text-sm text-white placeholder:text-slate-500 resize-none outline-none leading-relaxed py-1"
-              style={{ minHeight: '24px', maxHeight: '120px' }}
+              style={{ minHeight: "24px", maxHeight: "120px" }}
               onInput={e => {
                 const t = e.target as HTMLTextAreaElement;
-                t.style.height = 'auto';
-                t.style.height = Math.min(t.scrollHeight, 120) + 'px';
+                t.style.height = "auto";
+                t.style.height = Math.min(t.scrollHeight, 120) + "px";
               }}
             />
             <button
@@ -358,7 +465,9 @@ export default function CoachPage() {
             </button>
           </div>
           <div className="flex items-center justify-between mt-2 pt-2 border-t border-white/5">
-            <p className="text-[10px] text-slate-600">Enter to send · Shift+Enter for new line</p>
+            <p className="text-[10px] text-slate-600">
+              Enter to send · Shift+Enter for new line
+            </p>
             <div className="flex items-center gap-1 text-[10px] text-slate-600">
               <ChevronDown className="w-3 h-3" />
               <span>Climate data: EPA · DEFRA · IPCC 2023</span>

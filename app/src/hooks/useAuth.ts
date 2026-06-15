@@ -1,9 +1,9 @@
-import { useState, useEffect, useCallback, useMemo } from 'react';
-import { supabase, isSupabaseConfigured } from '@/lib/supabase';
-import type { User, Session } from '@supabase/supabase-js';
-import type { Database } from '@/types/supabase';
+import { useState, useEffect, useCallback, useMemo } from "react";
+import { supabase, isSupabaseConfigured } from "@/lib/supabase";
+import type { User, Session } from "@supabase/supabase-js";
+import type { Database } from "@/types/supabase";
 
-type Profile = Database['public']['Tables']['profiles']['Row'];
+type Profile = Database["public"]["Tables"]["profiles"]["Row"];
 
 export interface AuthState {
   user: User | null;
@@ -12,7 +12,12 @@ export interface AuthState {
   isLoading: boolean;
   isAuthenticated: boolean;
   signIn: (email: string, password: string) => Promise<{ error: Error | null }>;
-  signUp: (email: string, password: string, fullName: string, city?: string) => Promise<{ error: Error | null }>;
+  signUp: (
+    email: string,
+    password: string,
+    fullName: string,
+    city?: string
+  ) => Promise<{ error: Error | null }>;
   signOut: () => Promise<void>;
   refreshProfile: () => Promise<void>;
 }
@@ -55,43 +60,52 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [session, setSession] = useState<Session | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  const fetchProfile = useCallback(async (userId: string, sessionUser?: User) => {
-    if (!isSupabaseConfigured) {
-      return;
-    }
-
-    const { data, error } = await supabase
-      .from('profiles')
-      .select('*')
-      .eq('id', userId)
-      .single();
-    if (!error && data) {
-      setProfile(data as Profile);
-    } else if (error && (error.code === 'PGRST116' || error.message?.includes('no rows'))) {
-      // Profile does not exist yet (e.g. Google OAuth user or signup trigger didn't run)
-      const emailName = sessionUser?.email?.split('@')[0] || 'User';
-      const fullName = sessionUser?.user_metadata?.full_name || sessionUser?.user_metadata?.name || emailName;
-      const avatarUrl = sessionUser?.user_metadata?.avatar_url || null;
-
-      const { data: newProfile, error: insertError } = await supabase
-        .from('profiles')
-        .insert({
-          id: userId,
-          full_name: fullName,
-          avatar_url: avatarUrl,
-          household_size: 1,
-          banner_url: null,
-        })
-        .select()
-        .single();
-
-      if (!insertError && newProfile) {
-        setProfile(newProfile as Profile);
-      } else if (insertError) {
-        console.error('Failed to auto-create profile:', insertError);
+  const fetchProfile = useCallback(
+    async (userId: string, sessionUser?: User) => {
+      if (!isSupabaseConfigured) {
+        return;
       }
-    }
-  }, []);
+
+      const { data, error } = await supabase
+        .from("profiles")
+        .select("*")
+        .eq("id", userId)
+        .single();
+      if (!error && data) {
+        setProfile(data as Profile);
+      } else if (
+        error &&
+        (error.code === "PGRST116" || error.message?.includes("no rows"))
+      ) {
+        // Profile does not exist yet (e.g. Google OAuth user or signup trigger didn't run)
+        const emailName = sessionUser?.email?.split("@")[0] || "User";
+        const fullName =
+          sessionUser?.user_metadata?.full_name ||
+          sessionUser?.user_metadata?.name ||
+          emailName;
+        const avatarUrl = sessionUser?.user_metadata?.avatar_url || null;
+
+        const { data: newProfile, error: insertError } = await supabase
+          .from("profiles")
+          .insert({
+            id: userId,
+            full_name: fullName,
+            avatar_url: avatarUrl,
+            household_size: 1,
+            banner_url: null,
+          })
+          .select()
+          .single();
+
+        if (!insertError && newProfile) {
+          setProfile(newProfile as Profile);
+        } else if (insertError) {
+          console.error("Failed to auto-create profile:", insertError);
+        }
+      }
+    },
+    []
+  );
 
   useEffect(() => {
     if (!isSupabaseConfigured) {
@@ -108,7 +122,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setIsLoading(false);
     });
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session);
       setUser(session?.user ?? null);
       if (session?.user) {
@@ -123,29 +139,40 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const signIn = useCallback(async (email: string, password: string) => {
     if (!isSupabaseConfigured) {
-      return { error: new Error('Supabase is not configured.') };
+      return { error: new Error("Supabase is not configured.") };
     }
 
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
+    const { error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
     return { error };
   }, []);
 
-  const signUp = useCallback(async (email: string, password: string, fullName: string, city?: string) => {
-    if (!isSupabaseConfigured) {
-      return { error: new Error('Supabase is not configured.') };
-    }
+  const signUp = useCallback(
+    async (
+      email: string,
+      password: string,
+      fullName: string,
+      city?: string
+    ) => {
+      if (!isSupabaseConfigured) {
+        return { error: new Error("Supabase is not configured.") };
+      }
 
-    const { data, error } = await supabase.auth.signUp({ email, password });
-    if (!error && data.user) {
-      await supabase.from('profiles').insert({
-        id: data.user.id,
-        full_name: fullName,
-        city: city || null,
-        household_size: 1,
-      });
-    }
-    return { error };
-  }, []);
+      const { data, error } = await supabase.auth.signUp({ email, password });
+      if (!error && data.user) {
+        await supabase.from("profiles").insert({
+          id: data.user.id,
+          full_name: fullName,
+          city: city || null,
+          household_size: 1,
+        });
+      }
+      return { error };
+    },
+    []
+  );
 
   const signOut = useCallback(async () => {
     if (!isSupabaseConfigured) {
@@ -167,22 +194,30 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   }, [user, fetchProfile]);
 
-  const fallbackUser = useMemo(() => ({
-    id: '00000000-0000-0000-0000-000000000000',
-    email: 'guest@carbonwise.app',
-    user_metadata: {
-      full_name: 'Guest User',
-    }
-  } as any), []);
+  const fallbackUser = useMemo(
+    () =>
+      ({
+        id: "00000000-0000-0000-0000-000000000000",
+        email: "guest@carbonwise.app",
+        user_metadata: {
+          full_name: "Guest User",
+        },
+      }) as any,
+    []
+  );
 
-  const fallbackProfile = useMemo(() => ({
-    id: '00000000-0000-0000-0000-000000000000',
-    full_name: 'Guest User',
-    city: 'San Francisco',
-    household_size: 1,
-    avatar_url: null,
-    banner_url: null,
-  } as any), []);
+  const fallbackProfile = useMemo(
+    () =>
+      ({
+        id: "00000000-0000-0000-0000-000000000000",
+        full_name: "Guest User",
+        city: "San Francisco",
+        household_size: 1,
+        avatar_url: null,
+        banner_url: null,
+      }) as any,
+    []
+  );
 
   const state: AuthState = useMemo(
     () => ({
@@ -196,7 +231,18 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       signOut,
       refreshProfile,
     }),
-    [user, profile, session, isLoading, signIn, signUp, signOut, refreshProfile, fallbackUser, fallbackProfile],
+    [
+      user,
+      profile,
+      session,
+      isLoading,
+      signIn,
+      signUp,
+      signOut,
+      refreshProfile,
+      fallbackUser,
+      fallbackProfile,
+    ]
   );
 
   useEffect(() => {

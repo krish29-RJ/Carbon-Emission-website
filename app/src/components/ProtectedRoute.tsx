@@ -1,5 +1,5 @@
-import { useAuth } from '@/hooks/useAuth';
-import { Spinner } from '@/components/ui/spinner';
+import { useAuth } from "@/hooks/useAuth";
+import { Spinner } from "@/components/ui/spinner";
 
 interface Props {
   children: React.ReactNode;

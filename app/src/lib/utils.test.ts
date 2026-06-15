@@ -9,10 +9,14 @@ describe("Utils - cn (tailwind-merge + clsx)", () => {
 
   it("handles conditional classes correctly", () => {
     // Should handle standard clsx syntax
-    expect(cn("p-4", true && "m-4", false && "flex")).toBe("p-4 m-4");
+    const isTrue = true;
+    const isFalse = false;
+    expect(cn("p-4", isTrue && "m-4", isFalse && "flex")).toBe("p-4 m-4");
   });
 
   it("handles arrays and objects", () => {
-    expect(cn(["text-sm", "font-bold"], { "opacity-50": true })).toBe("text-sm font-bold opacity-50");
+    expect(cn(["text-sm", "font-bold"], { "opacity-50": true })).toBe(
+      "text-sm font-bold opacity-50"
+    );
   });
 });

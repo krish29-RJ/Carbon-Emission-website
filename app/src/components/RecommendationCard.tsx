@@ -1,9 +1,17 @@
-import { useState } from 'react';
-import { supabase, isSupabaseConfigured } from '@/lib/supabase';
-import { useAuth } from '@/hooks/useAuth';
-import { toast } from 'sonner';
-import { Target, Zap, Apple, Car, ShoppingBag, Check, Leaf } from 'lucide-react';
-import type { AIRecommendation } from '@/lib/aiInsights';
+import { useState } from "react";
+import { supabase, isSupabaseConfigured } from "@/lib/supabase";
+import { useAuth } from "@/hooks/useAuth";
+import { toast } from "sonner";
+import {
+  Target,
+  Zap,
+  Apple,
+  Car,
+  ShoppingBag,
+  Check,
+  Leaf,
+} from "lucide-react";
+import type { AIRecommendation } from "@/lib/aiInsights";
 
 const categoryIcons: Record<string, typeof Car> = {
   transport: Car,
@@ -12,17 +20,50 @@ const categoryIcons: Record<string, typeof Car> = {
   lifestyle: ShoppingBag,
 };
 
-const categoryColors: Record<string, { border: string; bg: string; badge: string; badgeText: string; iconBg: string }> = {
-  transport: { border: 'border-l-sky-500', bg: 'bg-sky-50/50', badge: 'bg-sky-100 text-sky-700', badgeText: 'text-sky-600', iconBg: 'bg-sky-100' },
-  energy: { border: 'border-l-orange-500', bg: 'bg-orange-50/50', badge: 'bg-orange-100 text-orange-700', badgeText: 'text-orange-600', iconBg: 'bg-orange-100' },
-  food: { border: 'border-l-emerald-500', bg: 'bg-emerald-50/50', badge: 'bg-emerald-100 text-emerald-700', badgeText: 'text-emerald-600', iconBg: 'bg-emerald-100' },
-  lifestyle: { border: 'border-l-violet-500', bg: 'bg-violet-50/50', badge: 'bg-violet-100 text-violet-700', badgeText: 'text-violet-600', iconBg: 'bg-violet-100' },
+const categoryColors: Record<
+  string,
+  {
+    border: string;
+    bg: string;
+    badge: string;
+    badgeText: string;
+    iconBg: string;
+  }
+> = {
+  transport: {
+    border: "border-l-sky-500",
+    bg: "bg-sky-50/50",
+    badge: "bg-sky-100 text-sky-700",
+    badgeText: "text-sky-600",
+    iconBg: "bg-sky-100",
+  },
+  energy: {
+    border: "border-l-orange-500",
+    bg: "bg-orange-50/50",
+    badge: "bg-orange-100 text-orange-700",
+    badgeText: "text-orange-600",
+    iconBg: "bg-orange-100",
+  },
+  food: {
+    border: "border-l-emerald-500",
+    bg: "bg-emerald-50/50",
+    badge: "bg-emerald-100 text-emerald-700",
+    badgeText: "text-emerald-600",
+    iconBg: "bg-emerald-100",
+  },
+  lifestyle: {
+    border: "border-l-violet-500",
+    bg: "bg-violet-50/50",
+    badge: "bg-violet-100 text-violet-700",
+    badgeText: "text-violet-600",
+    iconBg: "bg-violet-100",
+  },
 };
 
 const difficultyColors: Record<string, string> = {
-  easy: 'bg-emerald-100 text-emerald-700',
-  medium: 'bg-amber-100 text-amber-700',
-  hard: 'bg-red-100 text-red-700',
+  easy: "bg-emerald-100 text-emerald-700",
+  medium: "bg-amber-100 text-amber-700",
+  hard: "bg-red-100 text-red-700",
 };
 
 interface Props {
@@ -30,19 +71,23 @@ interface Props {
   onAccept?: () => void;
 }
 
-export default function RecommendationCard({ recommendation, onAccept }: Props) {
+export default function RecommendationCard({
+  recommendation,
+  onAccept,
+}: Props) {
   const { user } = useAuth();
   const [accepted, setAccepted] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const Icon = categoryIcons[recommendation.category] || Target;
-  const colors = categoryColors[recommendation.category] || categoryColors.transport;
+  const colors =
+    categoryColors[recommendation.category] || categoryColors.transport;
 
   const handleAccept = async () => {
     if (!user || accepted) return;
     if (!isSupabaseConfigured) {
       setAccepted(true);
-      toast.success('🎯 Challenge accepted! Check your Actions page.');
+      toast.success("🎯 Challenge accepted! Check your Actions page.");
       onAccept?.();
       return;
     }
@@ -57,16 +102,18 @@ export default function RecommendationCard({ recommendation, onAccept }: Props) 
       category: recommendation.category,
       estimated_saving: recommendation.estimatedSaving,
       difficulty: recommendation.difficulty,
-      status: 'active',
-      source: 'recommendation',
+      status: "active",
+      source: "recommendation",
       recommendation_data: recommendation,
     };
 
-    const { error: fullError } = await supabase.from('goals').insert(fullPayload);
+    const { error: fullError } = await supabase
+      .from("goals")
+      .insert(fullPayload);
 
     if (!fullError) {
       setAccepted(true);
-      toast.success('🎯 Challenge accepted! Check your Actions page.');
+      toast.success("🎯 Challenge accepted! Check your Actions page.");
       onAccept?.();
       setLoading(false);
       return;
@@ -80,39 +127,49 @@ export default function RecommendationCard({ recommendation, onAccept }: Props) 
       category: recommendation.category,
       estimated_saving: recommendation.estimatedSaving,
       difficulty: recommendation.difficulty,
-      status: 'active',
+      status: "active",
     };
 
-    const { error: minimalError } = await supabase.from('goals').insert(minimalPayload);
+    const { error: minimalError } = await supabase
+      .from("goals")
+      .insert(minimalPayload);
 
     if (!minimalError) {
       setAccepted(true);
-      toast.success('🎯 Challenge accepted! Check your Actions page.');
+      toast.success("🎯 Challenge accepted! Check your Actions page.");
       onAccept?.();
     } else {
       // Both failed — show specific error
-      const msg = minimalError.message || 'Unknown error';
+      const msg = minimalError.message || "Unknown error";
       toast.error(`Failed to accept goal: ${msg}`);
-      console.error('Insert error (full):', fullError);
-      console.error('Insert error (minimal):', minimalError);
+      console.error("Insert error (full):", fullError);
+      console.error("Insert error (minimal):", minimalError);
     }
 
     setLoading(false);
   };
 
   return (
-    <div className={`group bg-white rounded-2xl shadow-sm border border-slate-100 border-l-4 ${colors.border} p-5 hover:shadow-lg hover:border-l-[6px] transition-all duration-300 cursor-default`}>
+    <div
+      className={`group bg-white rounded-2xl shadow-sm border border-slate-100 border-l-4 ${colors.border} p-5 hover:shadow-lg hover:border-l-[6px] transition-all duration-300 cursor-default`}
+    >
       {/* Header badges */}
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-2">
-          <span className={`text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full ${colors.badge}`}>
+          <span
+            className={`text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full ${colors.badge}`}
+          >
             {recommendation.category}
           </span>
-          <span className={`text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full ${difficultyColors[recommendation.difficulty]}`}>
+          <span
+            className={`text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full ${difficultyColors[recommendation.difficulty]}`}
+          >
             {recommendation.difficulty}
           </span>
         </div>
-        <div className={`w-8 h-8 rounded-xl ${colors.iconBg} flex items-center justify-center opacity-60 group-hover:opacity-100 transition-opacity`}>
+        <div
+          className={`w-8 h-8 rounded-xl ${colors.iconBg} flex items-center justify-center opacity-60 group-hover:opacity-100 transition-opacity`}
+        >
           <Icon className={`w-4 h-4 ${colors.badgeText}`} />
         </div>
       </div>
@@ -150,7 +207,7 @@ export default function RecommendationCard({ recommendation, onAccept }: Props) 
                 Adding...
               </span>
             ) : (
-              'Accept Challenge'
+              "Accept Challenge"
             )}
           </button>
         )}

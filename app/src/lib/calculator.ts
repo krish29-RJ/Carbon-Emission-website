@@ -7,7 +7,7 @@ export interface CalculatorInput {
   acHoursPerDay: number;
   renewableEnergy: boolean;
   householdSize: number;
-  dietType: 'vegan' | 'vegetarian' | 'mixed' | 'meat-heavy';
+  dietType: "vegan" | "vegetarian" | "mixed" | "meat-heavy";
   meatMealsPerWeek: number;
   foodWasteKgPerWeek: number;
   shoppingOrdersPerMonth: number;
@@ -21,7 +21,7 @@ export interface CalculatorResult {
   foodCO2: number;
   lifestyleCO2: number;
   totalCO2: number;
-  impactLevel: 'low' | 'moderate' | 'high';
+  impactLevel: "low" | "moderate" | "high";
   breakdown: {
     category: string;
     value: number;
@@ -57,22 +57,29 @@ const FACTORS = {
 };
 
 const CATEGORY_COLORS: Record<string, string> = {
-  transport: '#0EA5E9',
-  energy: '#F97316',
-  food: '#10B981',
-  lifestyle: '#8B5CF6',
+  transport: "#0EA5E9",
+  energy: "#F97316",
+  food: "#10B981",
+  lifestyle: "#8B5CF6",
 };
 
 function round(value: number): number {
   return Math.round(value * 100) / 100;
 }
 
-function getImpactLevel(totalCO2: number): 'low' | 'moderate' | 'high' {
-  if (totalCO2 < 500) return 'low';
-  if (totalCO2 <= 1000) return 'moderate';
-  return 'high';
+function getImpactLevel(totalCO2: number): "low" | "moderate" | "high" {
+  if (totalCO2 < 500) return "low";
+  if (totalCO2 <= 1000) return "moderate";
+  return "high";
 }
 
+/**
+ * Calculates the total carbon footprint based on user input.
+ * Evaluates transport, energy, food, and lifestyle factors.
+ *
+ * @param {CalculatorInput} data - The user's activity data.
+ * @returns {CalculatorResult} Detailed breakdown and total carbon footprint.
+ */
 export function calculateFootprint(data: CalculatorInput): CalculatorResult {
   // Transport (monthly)
   const carCO2 = data.carKmPerWeek * 4 * FACTORS.CAR_KG_PER_KM;
@@ -82,13 +89,14 @@ export function calculateFootprint(data: CalculatorInput): CalculatorResult {
   const transportCO2 = carCO2 + busCO2 + trainCO2 + flightCO2;
 
   // Energy (monthly)
-  let electricityCO2 = data.electricityKwhPerMonth * FACTORS.ELECTRICITY_KG_PER_KWH;
+  let electricityCO2 =
+    data.electricityKwhPerMonth * FACTORS.ELECTRICITY_KG_PER_KWH;
   const acCO2 = data.acHoursPerDay * FACTORS.AC_KG_PER_HOUR_PER_DAY;
   let energyCO2 = (electricityCO2 + acCO2) / data.householdSize;
 
   if (data.renewableEnergy) {
-    energyCO2 *= (1 - FACTORS.RENEWABLE_ENERGY_REDUCTION);
-    electricityCO2 *= (1 - FACTORS.RENEWABLE_ENERGY_REDUCTION);
+    energyCO2 *= 1 - FACTORS.RENEWABLE_ENERGY_REDUCTION;
+    electricityCO2 *= 1 - FACTORS.RENEWABLE_ENERGY_REDUCTION;
   }
 
   // Food (monthly)
@@ -96,10 +104,11 @@ export function calculateFootprint(data: CalculatorInput): CalculatorResult {
     vegan: FACTORS.VEGAN_DIET_KG_PER_MONTH,
     vegetarian: FACTORS.VEGETARIAN_DIET_KG_PER_MONTH,
     mixed: FACTORS.MIXED_DIET_KG_PER_MONTH,
-    'meat-heavy': FACTORS.MEAT_HEAVY_DIET_KG_PER_MONTH,
+    "meat-heavy": FACTORS.MEAT_HEAVY_DIET_KG_PER_MONTH,
   };
 
-  const dietBaseCO2 = dietBases[data.dietType] || FACTORS.MIXED_DIET_KG_PER_MONTH;
+  const dietBaseCO2 =
+    dietBases[data.dietType] || FACTORS.MIXED_DIET_KG_PER_MONTH;
   const meatExtraCO2 = data.meatMealsPerWeek * 4 * FACTORS.MEAT_MEAL_EXTRA_KG;
   const wasteCO2 = data.foodWasteKgPerWeek * 4 * FACTORS.FOOD_WASTE_KG_PER_KG;
   const foodCO2 = dietBaseCO2 + meatExtraCO2 + wasteCO2;
@@ -110,40 +119,143 @@ export function calculateFootprint(data: CalculatorInput): CalculatorResult {
   let lifestyleCO2 = shoppingCO2 + deliveryCO2;
 
   if (data.recyclesOften) {
-    lifestyleCO2 *= (1 - FACTORS.RECYCLING_REDUCTION_PERCENT);
-    shoppingCO2 *= (1 - FACTORS.RECYCLING_REDUCTION_PERCENT);
-    deliveryCO2 *= (1 - FACTORS.RECYCLING_REDUCTION_PERCENT);
+    lifestyleCO2 *= 1 - FACTORS.RECYCLING_REDUCTION_PERCENT;
+    shoppingCO2 *= 1 - FACTORS.RECYCLING_REDUCTION_PERCENT;
+    deliveryCO2 *= 1 - FACTORS.RECYCLING_REDUCTION_PERCENT;
   }
 
   const totalCO2 = transportCO2 + energyCO2 + foodCO2 + lifestyleCO2;
 
   const activities = [
-    { category: 'transport', activity: 'car_petrol', value: data.carKmPerWeek * 4, unit: 'km/month', co2e: round(carCO2) },
-    { category: 'transport', activity: 'bus', value: data.busKmPerWeek * 4, unit: 'km/month', co2e: round(busCO2) },
-    { category: 'transport', activity: 'train_metro', value: data.metroKmPerWeek * 4, unit: 'km/month', co2e: round(trainCO2) },
-    { category: 'transport', activity: 'short_flight', value: data.flightHoursPerYear / 12, unit: 'hours/month', co2e: round(flightCO2) },
-    { category: 'energy', activity: 'electricity', value: data.electricityKwhPerMonth, unit: 'kWh/month', co2e: round(electricityCO2 / data.householdSize) },
-    { category: 'energy', activity: 'ac_usage', value: data.acHoursPerDay, unit: 'hours/day', co2e: round(acCO2 / data.householdSize) },
-    { category: 'food', activity: data.dietType + '_diet', value: 1, unit: 'month', co2e: round(dietBaseCO2) },
-    { category: 'food', activity: 'meat_meal', value: data.meatMealsPerWeek * 4, unit: 'meals/month', co2e: round(meatExtraCO2) },
-    { category: 'food', activity: 'food_waste', value: data.foodWasteKgPerWeek * 4, unit: 'kg/month', co2e: round(wasteCO2) },
-    { category: 'lifestyle', activity: 'online_shopping', value: data.shoppingOrdersPerMonth, unit: 'orders/month', co2e: round(shoppingCO2) },
-    { category: 'lifestyle', activity: 'delivery_order', value: data.deliveryOrdersPerMonth, unit: 'orders/month', co2e: round(deliveryCO2) },
+    {
+      category: "transport",
+      activity: "car_petrol",
+      value: data.carKmPerWeek * 4,
+      unit: "km/month",
+      co2e: round(carCO2),
+    },
+    {
+      category: "transport",
+      activity: "bus",
+      value: data.busKmPerWeek * 4,
+      unit: "km/month",
+      co2e: round(busCO2),
+    },
+    {
+      category: "transport",
+      activity: "train_metro",
+      value: data.metroKmPerWeek * 4,
+      unit: "km/month",
+      co2e: round(trainCO2),
+    },
+    {
+      category: "transport",
+      activity: "short_flight",
+      value: data.flightHoursPerYear / 12,
+      unit: "hours/month",
+      co2e: round(flightCO2),
+    },
+    {
+      category: "energy",
+      activity: "electricity",
+      value: data.electricityKwhPerMonth,
+      unit: "kWh/month",
+      co2e: round(electricityCO2 / data.householdSize),
+    },
+    {
+      category: "energy",
+      activity: "ac_usage",
+      value: data.acHoursPerDay,
+      unit: "hours/day",
+      co2e: round(acCO2 / data.householdSize),
+    },
+    {
+      category: "food",
+      activity: data.dietType + "_diet",
+      value: 1,
+      unit: "month",
+      co2e: round(dietBaseCO2),
+    },
+    {
+      category: "food",
+      activity: "meat_meal",
+      value: data.meatMealsPerWeek * 4,
+      unit: "meals/month",
+      co2e: round(meatExtraCO2),
+    },
+    {
+      category: "food",
+      activity: "food_waste",
+      value: data.foodWasteKgPerWeek * 4,
+      unit: "kg/month",
+      co2e: round(wasteCO2),
+    },
+    {
+      category: "lifestyle",
+      activity: "online_shopping",
+      value: data.shoppingOrdersPerMonth,
+      unit: "orders/month",
+      co2e: round(shoppingCO2),
+    },
+    {
+      category: "lifestyle",
+      activity: "delivery_order",
+      value: data.deliveryOrdersPerMonth,
+      unit: "orders/month",
+      co2e: round(deliveryCO2),
+    },
   ];
 
   if (data.renewableEnergy) {
-    activities.push({ category: 'energy', activity: 'renewable_energy_discount', value: 1, unit: 'discount', co2e: round(-(electricityCO2 + acCO2) * FACTORS.RENEWABLE_ENERGY_REDUCTION / data.householdSize) });
+    activities.push({
+      category: "energy",
+      activity: "renewable_energy_discount",
+      value: 1,
+      unit: "discount",
+      co2e: round(
+        (-(electricityCO2 + acCO2) * FACTORS.RENEWABLE_ENERGY_REDUCTION) /
+          data.householdSize
+      ),
+    });
   }
 
   if (data.recyclesOften) {
-    activities.push({ category: 'lifestyle', activity: 'recycling_discount', value: 1, unit: 'discount', co2e: round(-(shoppingCO2 + deliveryCO2) * FACTORS.RECYCLING_REDUCTION_PERCENT) });
+    activities.push({
+      category: "lifestyle",
+      activity: "recycling_discount",
+      value: 1,
+      unit: "discount",
+      co2e: round(
+        -(shoppingCO2 + deliveryCO2) * FACTORS.RECYCLING_REDUCTION_PERCENT
+      ),
+    });
   }
 
   const breakdown = [
-    { category: 'Transport', value: round(transportCO2), percentage: round((transportCO2 / totalCO2) * 100), color: CATEGORY_COLORS.transport },
-    { category: 'Energy', value: round(energyCO2), percentage: round((energyCO2 / totalCO2) * 100), color: CATEGORY_COLORS.energy },
-    { category: 'Food', value: round(foodCO2), percentage: round((foodCO2 / totalCO2) * 100), color: CATEGORY_COLORS.food },
-    { category: 'Lifestyle', value: round(lifestyleCO2), percentage: round((lifestyleCO2 / totalCO2) * 100), color: CATEGORY_COLORS.lifestyle },
+    {
+      category: "Transport",
+      value: round(transportCO2),
+      percentage: round((transportCO2 / totalCO2) * 100),
+      color: CATEGORY_COLORS.transport,
+    },
+    {
+      category: "Energy",
+      value: round(energyCO2),
+      percentage: round((energyCO2 / totalCO2) * 100),
+      color: CATEGORY_COLORS.energy,
+    },
+    {
+      category: "Food",
+      value: round(foodCO2),
+      percentage: round((foodCO2 / totalCO2) * 100),
+      color: CATEGORY_COLORS.food,
+    },
+    {
+      category: "Lifestyle",
+      value: round(lifestyleCO2),
+      percentage: round((lifestyleCO2 / totalCO2) * 100),
+      color: CATEGORY_COLORS.lifestyle,
+    },
   ];
 
   return {
@@ -158,28 +270,52 @@ export function calculateFootprint(data: CalculatorInput): CalculatorResult {
   };
 }
 
-export function getImpactLabel(level: 'low' | 'moderate' | 'high'): string {
+/**
+ * Returns a human-readable label for a given impact level.
+ *
+ * @param {'low' | 'moderate' | 'high'} level - The calculated impact level.
+ * @returns {string} Formatted impact label.
+ */
+export function getImpactLabel(level: "low" | "moderate" | "high"): string {
   switch (level) {
-    case 'low': return 'Low Impact';
-    case 'moderate': return 'Moderate Impact';
-    case 'high': return 'High Impact';
+    case "low":
+      return "Low Impact";
+    case "moderate":
+      return "Moderate Impact";
+    case "high":
+      return "High Impact";
   }
 }
 
-export function getImpactColor(level: 'low' | 'moderate' | 'high'): string {
+/**
+ * Returns a hex color code associated with a given impact level.
+ *
+ * @param {'low' | 'moderate' | 'high'} level - The calculated impact level.
+ * @returns {string} Hex color string.
+ */
+export function getImpactColor(level: "low" | "moderate" | "high"): string {
   switch (level) {
-    case 'low': return '#10B981';
-    case 'moderate': return '#F59E0B';
-    case 'high': return '#EF4444';
+    case "low":
+      return "#10B981";
+    case "moderate":
+      return "#F59E0B";
+    case "high":
+      return "#EF4444";
   }
 }
 
+/**
+ * Returns a formatted label for a given category key.
+ *
+ * @param {string} category - The raw category identifier.
+ * @returns {string} The formatted display label.
+ */
 export function getCategoryLabel(category: string): string {
   const labels: Record<string, string> = {
-    transport: 'Transport',
-    energy: 'Home Energy',
-    food: 'Food',
-    lifestyle: 'Lifestyle',
+    transport: "Transport",
+    energy: "Home Energy",
+    food: "Food",
+    lifestyle: "Lifestyle",
   };
   return labels[category] || category;
 }

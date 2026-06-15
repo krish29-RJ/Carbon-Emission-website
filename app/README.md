@@ -18,15 +18,15 @@ An AI-powered Carbon Footprint Awareness Platform that helps individuals underst
 
 ## Tech Stack
 
-| Layer | Technology |
-|-------|-----------|
-| Frontend | React 19 + TypeScript + Vite + Tailwind CSS + shadcn/ui |
-| Charts | Recharts |
-| Animations | Framer Motion |
-| Auth | Supabase Auth (email/password) |
-| Database | Supabase PostgreSQL |
-| AI | OpenAI API (GPT-4o-mini) with JSON mode |
-| Icons | Lucide React |
+| Layer      | Technology                                              |
+| ---------- | ------------------------------------------------------- |
+| Frontend   | React 19 + TypeScript + Vite + Tailwind CSS + shadcn/ui |
+| Charts     | Recharts                                                |
+| Animations | Framer Motion                                           |
+| Auth       | Supabase Auth (email/password)                          |
+| Database   | Supabase PostgreSQL                                     |
+| AI         | OpenAI API (GPT-4o-mini) with JSON mode                 |
+| Icons      | Lucide React                                            |
 
 ## Carbon Calculation Methodology
 
@@ -34,16 +34,16 @@ All carbon calculations are **deterministic and formula-based**. AI is used **on
 
 ### Emission Factors Used
 
-| Activity | Factor | Source |
-|----------|--------|--------|
-| Car (petrol) | 0.192 kg CO2e/km | EPA |
-| Bus | 0.089 kg CO2e/km | DEFRA |
-| Train/Metro | 0.041 kg CO2e/km | DEFRA |
-| Short Flight | 90 kg CO2e/hour | ICAO |
-| Electricity | 0.7 kg CO2e/kWh | EIA |
-| Vegan Diet | 100 kg CO2e/month | Oxford |
+| Activity        | Factor            | Source |
+| --------------- | ----------------- | ------ |
+| Car (petrol)    | 0.192 kg CO2e/km  | EPA    |
+| Bus             | 0.089 kg CO2e/km  | DEFRA  |
+| Train/Metro     | 0.041 kg CO2e/km  | DEFRA  |
+| Short Flight    | 90 kg CO2e/hour   | ICAO   |
+| Electricity     | 0.7 kg CO2e/kWh   | EIA    |
+| Vegan Diet      | 100 kg CO2e/month | Oxford |
 | Vegetarian Diet | 150 kg CO2e/month | Oxford |
-| Mixed Diet | 220 kg CO2e/month | Oxford |
+| Mixed Diet      | 220 kg CO2e/month | Oxford |
 | Meat-Heavy Diet | 320 kg CO2e/month | Oxford |
 
 ### Impact Levels
@@ -175,6 +175,7 @@ The app generates personalized recommendations using OpenAI's GPT-4o-mini model.
 - User profile (name, city, household size)
 
 It returns structured JSON with:
+
 - A friendly summary of the footprint
 - Impact level classification
 - 4 specific, actionable recommendations with difficulty and estimated savings
@@ -201,18 +202,18 @@ If Google sign-in is unavailable on localhost, check:
 
 Users earn badges for milestones:
 
-| Badge | Condition |
-|-------|-----------|
-| First Report | Complete first footprint calculation |
-| Carbon Starter | Accept first reduction goal |
-| Action Taker | Complete first goal |
-| 10% Reducer | Reduce footprint by 10% from previous |
-| Transport Saver | Complete a transport goal |
-| Food Hero | Complete a food goal |
-| Energy Saver | Complete an energy goal |
-| Eco Shopper | Complete a lifestyle goal |
-| Simulator Pro | Use the simulator 3 times |
-| Goal Crusher | Complete 5 goals |
+| Badge           | Condition                             |
+| --------------- | ------------------------------------- |
+| First Report    | Complete first footprint calculation  |
+| Carbon Starter  | Accept first reduction goal           |
+| Action Taker    | Complete first goal                   |
+| 10% Reducer     | Reduce footprint by 10% from previous |
+| Transport Saver | Complete a transport goal             |
+| Food Hero       | Complete a food goal                  |
+| Energy Saver    | Complete an energy goal               |
+| Eco Shopper     | Complete a lifestyle goal             |
+| Simulator Pro   | Use the simulator 3 times             |
+| Goal Crusher    | Complete 5 goals                      |
 
 ## License
 

@@ -1,5 +1,17 @@
-import { useState } from 'react';
-import { FileCheck, Flag, CheckCircle, TrendingDown, Car, Apple, Zap, ShoppingBag, Sliders, Trophy, Lock } from 'lucide-react';
+import { useState } from "react";
+import {
+  FileCheck,
+  Flag,
+  CheckCircle,
+  TrendingDown,
+  Car,
+  Apple,
+  Zap,
+  ShoppingBag,
+  Sliders,
+  Trophy,
+  Lock,
+} from "lucide-react";
 
 const iconMap: Record<string, typeof FileCheck> = {
   FileCheck,
@@ -15,11 +27,11 @@ const iconMap: Record<string, typeof FileCheck> = {
 };
 
 const categoryColors: Record<string, { earned: string; locked: string }> = {
-  transport: { earned: 'bg-sky-500', locked: 'bg-slate-200' },
-  energy: { earned: 'bg-orange-500', locked: 'bg-slate-200' },
-  food: { earned: 'bg-emerald-500', locked: 'bg-slate-200' },
-  lifestyle: { earned: 'bg-violet-500', locked: 'bg-slate-200' },
-  general: { earned: 'bg-emerald-600', locked: 'bg-slate-200' },
+  transport: { earned: "bg-sky-500", locked: "bg-slate-200" },
+  energy: { earned: "bg-orange-500", locked: "bg-slate-200" },
+  food: { earned: "bg-emerald-500", locked: "bg-slate-200" },
+  lifestyle: { earned: "bg-violet-500", locked: "bg-slate-200" },
+  general: { earned: "bg-emerald-600", locked: "bg-slate-200" },
 };
 
 interface Badge {
@@ -46,14 +58,18 @@ export default function BadgeCard({ badge }: Props) {
       onMouseEnter={() => setShowTooltip(true)}
       onMouseLeave={() => setShowTooltip(false)}
     >
-      <div className={`w-12 h-12 rounded-full ${badge.earned ? colors.earned : colors.locked} flex items-center justify-center transition-all`}>
+      <div
+        className={`w-12 h-12 rounded-full ${badge.earned ? colors.earned : colors.locked} flex items-center justify-center transition-all`}
+      >
         {badge.earned ? (
           <Icon className="w-6 h-6 text-white" />
         ) : (
           <Lock className="w-5 h-5 text-slate-400" />
         )}
       </div>
-      <span className={`text-[11px] font-medium text-center leading-tight ${badge.earned ? 'text-slate-700' : 'text-slate-400'}`}>
+      <span
+        className={`text-[11px] font-medium text-center leading-tight ${badge.earned ? "text-slate-700" : "text-slate-400"}`}
+      >
         {badge.name}
       </span>
 

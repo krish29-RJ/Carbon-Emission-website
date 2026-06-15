@@ -1,13 +1,22 @@
-import { Link, useNavigate } from 'react-router';
-import { motion } from 'framer-motion';
-import type { Variants } from 'framer-motion';
+import { Link, useNavigate } from "react-router";
+import { motion } from "framer-motion";
+import type { Variants } from "framer-motion";
 import {
-  Leaf, Calculator, Brain, Target, Sliders, Users,
-  ArrowRight, ChevronDown, BookOpen, Github, Twitter
-} from 'lucide-react';
-import { useAuth } from '@/hooks/useAuth';
-import { Button } from '@/components/ui/button';
-import EcoWorld from '@/components/EcoWorld';
+  Leaf,
+  Calculator,
+  Brain,
+  Target,
+  Sliders,
+  Users,
+  ArrowRight,
+  ChevronDown,
+  BookOpen,
+  Github,
+  Twitter,
+} from "lucide-react";
+import { useAuth } from "@/hooks/useAuth";
+import { Button } from "@/components/ui/button";
+import EcoWorld from "@/components/EcoWorld";
 
 const fadeInUp: Variants = {
   hidden: { opacity: 0, y: 30 },
@@ -19,12 +28,42 @@ const fadeInUp: Variants = {
 };
 
 const features = [
-  { icon: Calculator, title: 'Smart Activity Tracker', desc: 'Log your meals, trips, flights, and purchases. Delightful interactive slider inputs show equivalent carbon comparisons.', image: '🌱' },
-  { icon: Leaf, title: 'Dynamic 3D Living World', desc: 'Watch your carbon footprint visually reflect on a floating eco-island. Grey skies and smog vanish as you choose green habits.', image: '🏝️' },
-  { icon: Target, title: 'Real-Time Nudge System', desc: 'Receive well-timed, contextual, one-line alerts before confirming logs. Zero judgment, just alternatives.', image: '⚡' },
-  { icon: Brain, title: 'AI Personal Coach', desc: 'Receive hyper-specific actionable advice and conversational check-ins. Track habits with conversational recommendations.', image: '🤖' },
-  { icon: Users, title: 'Social Competition', desc: 'Join collective accountability Circles (hostel floors, design vs engineering). Earn team points and streaks together.', image: '👥' },
-  { icon: Sliders, title: 'Gamification Layer', desc: 'Accumulate XP points and level up from Seedling to Forest Guardian. Share beautiful custom report cards.', image: '🏆' },
+  {
+    icon: Calculator,
+    title: "Smart Activity Tracker",
+    desc: "Log your meals, trips, flights, and purchases. Delightful interactive slider inputs show equivalent carbon comparisons.",
+    image: "🌱",
+  },
+  {
+    icon: Leaf,
+    title: "Dynamic 3D Living World",
+    desc: "Watch your carbon footprint visually reflect on a floating eco-island. Grey skies and smog vanish as you choose green habits.",
+    image: "🏝️",
+  },
+  {
+    icon: Target,
+    title: "Real-Time Nudge System",
+    desc: "Receive well-timed, contextual, one-line alerts before confirming logs. Zero judgment, just alternatives.",
+    image: "⚡",
+  },
+  {
+    icon: Brain,
+    title: "AI Personal Coach",
+    desc: "Receive hyper-specific actionable advice and conversational check-ins. Track habits with conversational recommendations.",
+    image: "🤖",
+  },
+  {
+    icon: Users,
+    title: "Social Competition",
+    desc: "Join collective accountability Circles (hostel floors, design vs engineering). Earn team points and streaks together.",
+    image: "👥",
+  },
+  {
+    icon: Sliders,
+    title: "Gamification Layer",
+    desc: "Accumulate XP points and level up from Seedling to Forest Guardian. Share beautiful custom report cards.",
+    image: "🏆",
+  },
 ];
 
 export default function Home() {
@@ -50,7 +89,9 @@ export default function Home() {
           >
             <div className="inline-flex items-center gap-2 bg-emerald-500/10 border border-emerald-500/20 rounded-full px-4 py-1.5 text-emerald-400">
               <Leaf className="w-4 h-4" />
-              <span className="text-xs font-semibold uppercase tracking-wider">AI-Powered Carbon Sandbox</span>
+              <span className="text-xs font-semibold uppercase tracking-wider">
+                AI-Powered Carbon Sandbox
+              </span>
             </div>
 
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-tight tracking-tight">
@@ -62,13 +103,18 @@ export default function Home() {
             </h1>
 
             <p className="text-base sm:text-lg text-slate-400 leading-relaxed max-w-xl">
-              Don&apos;t just read reports at the end of the month. See your daily choices shape a floating, living world. Get contextual nudges at the point of action, compete in team circles, and level up your eco-footprint.
+              Don&apos;t just read reports at the end of the month. See your
+              daily choices shape a floating, living world. Get contextual
+              nudges at the point of action, compete in team circles, and level
+              up your eco-footprint.
             </p>
 
             <div className="flex flex-col sm:flex-row items-center gap-4 pt-2">
               <Button
                 size="lg"
-                onClick={() => navigate(isAuthenticated ? '/dashboard' : '/auth')}
+                onClick={() =>
+                  navigate(isAuthenticated ? "/dashboard" : "/auth")
+                }
                 className="w-full sm:w-auto bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-400 hover:to-emerald-500 text-slate-950 font-bold px-8 py-6 text-base rounded-full shadow-lg shadow-emerald-500/20 transition-all duration-300"
               >
                 Log My First Activity
@@ -87,14 +133,21 @@ export default function Home() {
 
             <div className="pt-6 flex items-center gap-3">
               <div className="flex -space-x-2">
-                {[1,2,3,4,5].map(i => (
-                  <div key={i} className="w-8 h-8 rounded-full bg-slate-800 border-2 border-[#030712] flex items-center justify-center">
-                    <span className="text-[10px] text-emerald-400 font-bold">{String.fromCharCode(64+i)}</span>
+                {[1, 2, 3, 4, 5].map(i => (
+                  <div
+                    key={i}
+                    className="w-8 h-8 rounded-full bg-slate-800 border-2 border-[#030712] flex items-center justify-center"
+                  >
+                    <span className="text-[10px] text-emerald-400 font-bold">
+                      {String.fromCharCode(64 + i)}
+                    </span>
                   </div>
                 ))}
               </div>
               <p className="text-xs text-slate-500">
-                Join <span className="font-semibold text-emerald-400">12,000+</span> builders transforming climate awareness.
+                Join{" "}
+                <span className="font-semibold text-emerald-400">12,000+</span>{" "}
+                builders transforming climate awareness.
               </p>
             </div>
           </motion.div>
@@ -107,7 +160,14 @@ export default function Home() {
           >
             <div className="w-full max-w-lg">
               {/* Floating isometric sandbox component */}
-              <EcoWorld total={340} transport={80} energy={120} food={90} lifestyle={50} interactive={false} />
+              <EcoWorld
+                total={340}
+                transport={80}
+                energy={120}
+                food={90}
+                lifestyle={50}
+                interactive={false}
+              />
             </div>
           </motion.div>
         </div>
@@ -115,7 +175,7 @@ export default function Home() {
         <motion.div
           className="absolute bottom-8 left-1/2 -translate-x-1/2"
           animate={{ y: [0, 8, 0] }}
-          transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+          transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
         >
           <ChevronDown className="w-6 h-6 text-slate-600" />
         </motion.div>
@@ -127,7 +187,7 @@ export default function Home() {
           <motion.div
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true, margin: '-100px' }}
+            viewport={{ once: true, margin: "-100px" }}
             variants={fadeInUp}
             custom={0}
             className="text-center mb-16 space-y-4"
@@ -136,7 +196,9 @@ export default function Home() {
               An experience built to change behaviors
             </h2>
             <p className="text-sm sm:text-base text-slate-400 max-w-xl mx-auto leading-relaxed">
-              We pushed past standard carbon charts and checklists. Every feature in CarbonWise is designed for visual, emotional, and social engagement.
+              We pushed past standard carbon charts and checklists. Every
+              feature in CarbonWise is designed for visual, emotional, and
+              social engagement.
             </p>
           </motion.div>
 
@@ -146,7 +208,7 @@ export default function Home() {
                 key={f.title}
                 initial="hidden"
                 whileInView="visible"
-                viewport={{ once: true, margin: '-50px' }}
+                viewport={{ once: true, margin: "-50px" }}
                 variants={fadeInUp}
                 custom={i}
                 className="glass-card rounded-2xl p-6 hover:border-emerald-500/20 transition-all duration-300 group hover:translate-y-[-4px]"
@@ -157,8 +219,12 @@ export default function Home() {
                   </div>
                   <span className="text-2xl">{f.image}</span>
                 </div>
-                <h3 className="text-lg font-bold text-slate-100 mb-2">{f.title}</h3>
-                <p className="text-xs sm:text-sm text-slate-400 leading-relaxed">{f.desc}</p>
+                <h3 className="text-lg font-bold text-slate-100 mb-2">
+                  {f.title}
+                </h3>
+                <p className="text-xs sm:text-sm text-slate-400 leading-relaxed">
+                  {f.desc}
+                </p>
               </motion.div>
             ))}
           </div>
@@ -181,11 +247,12 @@ export default function Home() {
             Transform numbers into action.
           </h2>
           <p className="text-slate-400 mb-8 max-w-md mx-auto leading-relaxed">
-            Create an account in seconds, calculate your baseline footprint, and explore your living island sandbox.
+            Create an account in seconds, calculate your baseline footprint, and
+            explore your living island sandbox.
           </p>
           <Button
             size="lg"
-            onClick={() => navigate(isAuthenticated ? '/dashboard' : '/auth')}
+            onClick={() => navigate(isAuthenticated ? "/dashboard" : "/auth")}
             className="bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-400 hover:to-cyan-400 text-slate-950 font-bold px-10 py-6 text-base rounded-full shadow-lg shadow-emerald-500/15"
           >
             Enter Sandbox — It&apos;s Free
@@ -201,39 +268,80 @@ export default function Home() {
             <div>
               <div className="flex items-center gap-2 mb-4">
                 <Leaf className="w-5 h-5 text-emerald-400" />
-                <span className="text-lg font-bold tracking-tight text-white">CarbonWise</span>
+                <span className="text-lg font-bold tracking-tight text-white">
+                  CarbonWise
+                </span>
               </div>
               <p className="text-xs text-slate-500 leading-relaxed">
-                Shifting environmental responsibility from standard checklists to immersive emotional sandboxes. Built for modern sustainability campaigns.
+                Shifting environmental responsibility from standard checklists
+                to immersive emotional sandboxes. Built for modern
+                sustainability campaigns.
               </p>
             </div>
 
             <div>
-              <h4 className="text-sm font-semibold text-slate-300 mb-4">Product</h4>
+              <h4 className="text-sm font-semibold text-slate-300 mb-4">
+                Product
+              </h4>
               <div className="flex flex-col gap-2.5 text-xs text-slate-400">
-                <Link to="/log" className="hover:text-emerald-400 transition-colors">Smart Logger</Link>
-                <Link to="/world" className="hover:text-emerald-400 transition-colors">Living World</Link>
-                <Link to="/social" className="hover:text-emerald-400 transition-colors">Social circles</Link>
-                <Link to="/coach" className="hover:text-emerald-400 transition-colors">AI Coach</Link>
+                <Link
+                  to="/log"
+                  className="hover:text-emerald-400 transition-colors"
+                >
+                  Smart Logger
+                </Link>
+                <Link
+                  to="/world"
+                  className="hover:text-emerald-400 transition-colors"
+                >
+                  Living World
+                </Link>
+                <Link
+                  to="/social"
+                  className="hover:text-emerald-400 transition-colors"
+                >
+                  Social circles
+                </Link>
+                <Link
+                  to="/coach"
+                  className="hover:text-emerald-400 transition-colors"
+                >
+                  AI Coach
+                </Link>
               </div>
             </div>
 
             <div>
-              <h4 className="text-sm font-semibold text-slate-300 mb-4">Science</h4>
+              <h4 className="text-sm font-semibold text-slate-300 mb-4">
+                Science
+              </h4>
               <div className="flex flex-col gap-2.5 text-xs text-slate-400">
-                <Link to="/methodology" className="hover:text-emerald-400 transition-colors">EPA Methodology</Link>
+                <Link
+                  to="/methodology"
+                  className="hover:text-emerald-400 transition-colors"
+                >
+                  EPA Methodology
+                </Link>
                 <span className="text-slate-500">DEFRA Factors</span>
                 <span className="text-slate-500">ICAO Database</span>
               </div>
             </div>
 
             <div>
-              <h4 className="text-sm font-semibold text-slate-300 mb-4">Community</h4>
+              <h4 className="text-sm font-semibold text-slate-300 mb-4">
+                Community
+              </h4>
               <div className="flex items-center gap-3">
-                <a href="#" className="w-9 h-9 rounded-lg bg-slate-900 flex items-center justify-center border border-slate-800 hover:bg-slate-800 transition-colors">
+                <a
+                  href="#"
+                  className="w-9 h-9 rounded-lg bg-slate-900 flex items-center justify-center border border-slate-800 hover:bg-slate-800 transition-colors"
+                >
                   <Github className="w-4 h-4 text-slate-400" />
                 </a>
-                <a href="#" className="w-9 h-9 rounded-lg bg-slate-900 flex items-center justify-center border border-slate-800 hover:bg-slate-800 transition-colors">
+                <a
+                  href="#"
+                  className="w-9 h-9 rounded-lg bg-slate-900 flex items-center justify-center border border-slate-800 hover:bg-slate-800 transition-colors"
+                >
                   <Twitter className="w-4 h-4 text-slate-400" />
                 </a>
               </div>
@@ -241,7 +349,9 @@ export default function Home() {
           </div>
 
           <div className="border-t border-slate-900 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
-            <p className="text-[10px] text-slate-600">© 2026 CarbonWise. Dedicated to environmental restoration.</p>
+            <p className="text-[10px] text-slate-600">
+              © 2026 CarbonWise. Dedicated to environmental restoration.
+            </p>
             <div className="flex items-center gap-1 text-[10px] text-slate-600">
               <BookOpen className="w-3.5 h-3.5" />
               <span>Climate Data Core v2.4</span>

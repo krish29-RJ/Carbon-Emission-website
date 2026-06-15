@@ -4,7 +4,7 @@ import {
   getImpactLabel,
   getImpactColor,
   getCategoryLabel,
-  type CalculatorInput
+  type CalculatorInput,
 } from "./calculator";
 
 describe("Calculator Utility Functions", () => {
@@ -50,11 +50,11 @@ describe("Calculator Utility Functions", () => {
         foodWasteKgPerWeek: 1, // 4 kg/mo * 2.5 = 10
         shoppingOrdersPerMonth: 2, // 2 * 8 = 16
         deliveryOrdersPerMonth: 1, // 1 * 2.5 = 2.5
-        recyclesOften: true // 5% reduction on lifestyle
+        recyclesOften: true, // 5% reduction on lifestyle
       };
 
       const result = calculateFootprint(input);
-      
+
       expect(result.impactLevel).toBe("low");
       expect(result.transportCO2).toBeGreaterThan(0);
       expect(result.energyCO2).toBeGreaterThan(0);
@@ -69,7 +69,7 @@ describe("Calculator Utility Functions", () => {
         busKmPerWeek: 0,
         metroKmPerWeek: 0,
         flightHoursPerYear: 50, // High flights
-        electricityKwhPerMonth: 1000, 
+        electricityKwhPerMonth: 1000,
         acHoursPerDay: 12,
         renewableEnergy: false,
         householdSize: 1,
@@ -78,17 +78,20 @@ describe("Calculator Utility Functions", () => {
         foodWasteKgPerWeek: 5,
         shoppingOrdersPerMonth: 10,
         deliveryOrdersPerMonth: 15,
-        recyclesOften: false
+        recyclesOften: false,
       };
 
       const result = calculateFootprint(input);
-      
+
       expect(result.impactLevel).toBe("high");
       expect(result.totalCO2).toBeGreaterThan(1000);
-      
+
       // Verify breakdowns are calculated
       expect(result.breakdown.length).toBe(4);
-      const totalPercentage = result.breakdown.reduce((sum, item) => sum + item.percentage, 0);
+      const totalPercentage = result.breakdown.reduce(
+        (sum, item) => sum + item.percentage,
+        0
+      );
       // It should be close to 100, allowing for some small rounding diffs
       expect(totalPercentage).toBeGreaterThanOrEqual(99);
       expect(totalPercentage).toBeLessThanOrEqual(101);
